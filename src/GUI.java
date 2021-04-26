@@ -31,7 +31,7 @@ public class GUI extends Frame {
     private class LowerBuyerPricesListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
-            String buyerFilePath = "C:\\Users\\Public\\Daybreak Game Company\\Installed Games\\EverQuest\\userdata\\BART_Charname_server.ini";
+            String buyerFilePath = "C:\\Users\\Public\\Daybreak Game Company\\Installed Games\\EverQuest\\userdata\\BART_Aabala_xegony.ini";
             File buyerIni = new File(buyerFilePath);
             Scanner scanner = null;
             try {
@@ -48,23 +48,13 @@ public class GUI extends Frame {
                     if (price < 50) {
                         price++;
                     } else if (price < 100) {
-                        price++;
-                        price++;
+                        price = price + 2;
                     } else if (price < 200) {
-                        price++;
-                        price++;
-                        price++;
+                        price = price + 3;
                     } else if (price < 400) {
-                        price++;
-                        price++;
-                        price++;
-                        price++;
+                        price = price + 4;
                     } else if (price < 1800000) {
-                        price++;
-                        price++;
-                        price++;
-                        price++;
-                        price++;
+                        price = price + 5;
                     }
                     String newLine = data.substring(0, getSeventhCarrot(data) + 1) + price * 1000 + data.substring(getEighthCarrot(data));
                     newString.append(newLine).append(System.lineSeparator());
@@ -104,7 +94,7 @@ public class GUI extends Frame {
     private class LowerSellerPricesListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
-            String sellerFilePath = "C:\\Users\\Public\\Daybreak Game Company\\Installed Games\\EverQuest\\BZR_Charname_server.ini";
+            String sellerFilePath = "C:\\Users\\Public\\Daybreak Game Company\\Installed Games\\EverQuest\\BZR_Tennisales_xegony.ini";
             File sellerIni = new File(sellerFilePath);
             Scanner scanner = null;
             try {
