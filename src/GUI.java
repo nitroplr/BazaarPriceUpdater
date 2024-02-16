@@ -15,20 +15,28 @@ public class GUI extends Frame {
         add(raise_buyer_prices);
         LowerBuyerPricesListener buyerListener = new LowerBuyerPricesListener();
         raise_buyer_prices.addActionListener(buyerListener);
-        setVisible(true);
-        setSize(width,height);
-        setBounds(center.x - width / 2, center.y - height / 2, width, height);
+
         Button lower_seller_prices = new Button("Lower Seller Prices");
         add(lower_seller_prices);
         LowerSellerPricesListener sellerListener = new LowerSellerPricesListener();
         lower_seller_prices.addActionListener(sellerListener);
+
+        Button remove_tells = new Button("Remove Tells");
+        add(remove_tells);
+        TellRemoverListener tellRemoverListener = new TellRemoverListener();
+        remove_tells.addActionListener(tellRemoverListener);
+
+
+        setVisible(true);
+        setSize(width,height);
+        setBounds(center.x - width / 2, center.y - height / 2, width, height);
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
     }
     public static void main(String[] args) {                // The Panel container adds a Button component
        GUI app = new GUI();
     }
 
-    private class LowerBuyerPricesListener implements ActionListener{
+    private static class LowerBuyerPricesListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
             String buyerFilePath = "C:\\Users\\Public\\Daybreak Game Company\\Installed Games\\EverQuest\\userdata\\BART_Aabala_xegony.ini";
@@ -44,7 +52,6 @@ public class GUI extends Frame {
                 String data = scanner.nextLine();
                 if (data.length() > 30) {
                     int price = Integer.parseInt(data.substring(getSeventhCarrot(data) + 1, getEighthCarrot(data))) / 1000;
-
                     if (price < 50) {
                         price++;
                     } else if (price < 100) {
@@ -91,10 +98,10 @@ public class GUI extends Frame {
         }
     }
 
-    private class LowerSellerPricesListener implements ActionListener{
+    private static class LowerSellerPricesListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
-            String sellerFilePath = "C:\\Users\\Public\\Daybreak Game Company\\Installed Games\\EverQuest\\BZR_Tennisales_xegony.ini";
+            String sellerFilePath = "C:\\Users\\Public\\Daybreak Game Company\\Installed Games\\EverQuest\\BZR_Elbou_mischief.ini";
             File sellerIni = new File(sellerFilePath);
             Scanner scanner = null;
             try {
@@ -107,7 +114,7 @@ public class GUI extends Frame {
                 String data = scanner.nextLine();
                 if (!data.contains("ItemToSell")) {
                     int price = Integer.parseInt(data.substring(data.indexOf('=') + 1)) / 1000;
-                    if (price < 1999999 && price > 10) {
+                    if (price < 1999999 && price > 5000) {
                         price = (int)(price * .99);
                     }
                     String newLine = data.substring(0, data.indexOf('=') + 1) + price * 1000;
@@ -117,6 +124,43 @@ public class GUI extends Frame {
                 }
             }
             System.out.println(newString);
+            scanner.close();
+            try {
+                FileWriter fileWriter = new FileWriter(sellerFilePath);
+                fileWriter.write(newString.toString());
+                fileWriter.flush();
+                fileWriter.close();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        }
+    }
+
+    private static class TellRemoverListener implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String sellerFilePath = "C:\\Users\\Public\\Daybreak Game Company\\Installed Games\\EverQuest\\Logs\\eqlog_Blaston_mischief.txt";
+            File sellerIni = new File(sellerFilePath);
+            Scanner scanner = null;
+            try {
+                scanner = new Scanner(sellerIni);
+            } catch (FileNotFoundException fileNotFoundException) {
+                fileNotFoundException.printStackTrace();
+            }
+            StringBuffer newString = new StringBuffer();
+            int i = 0;
+            while (scanner.hasNextLine()){
+                i++;
+                if (i % 1000 == 0) {
+                    System.out.println(i);
+                }
+                String data = scanner.nextLine();
+                if (data.contains("tells you") || data.contains("You told")) {
+                } else {
+                    newString.append(data).append(System.lineSeparator());
+                }
+            }
+            System.out.println("done");
             scanner.close();
             try {
                 FileWriter fileWriter = new FileWriter(sellerFilePath);
